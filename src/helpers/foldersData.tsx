@@ -14,9 +14,10 @@ export const renameFolder = async (current_name: string, new_name: string) => {
   }
 };
 
-export const deleteFolder = async (folder: string) => {
+export const deleteFolder = async (accountId: number, folder: string) => {
   try {
     const message = await invoke<string>("delete_folder", {
+      accountId: accountId,
       folder: folder,
     });
     var bool_value = message == 'true';

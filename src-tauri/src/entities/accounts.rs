@@ -20,6 +20,17 @@ pub fn create(app_handle: tauri::AppHandle, account: NewAccount) -> Account {
         .expect("Error creating new account")
 }
 
+pub fn show(account_id: i32, app_handle: tauri::AppHandle) -> Option<Account> {
+    let conn = &mut establish_connection(&app_handle);
+
+    accounts
+        .find(account_id)
+        .select(Account::as_select())
+        .first(conn)
+        .optional()
+        .expect("Error finding account")
+}
+
 pub fn spawn_greaderapi_accounts_sync_loop(app_handle: tauri::AppHandle) {
     tauri::async_runtime::spawn(async move {
         let _ = greaderapi_accounts_sync_loop(app_handle).await;

@@ -22,35 +22,28 @@ pub fn rename(current_name: String, new_name: String, app_handle: tauri::AppHand
     }
 }
 
-pub fn delete(folder_name: String, app_handle: tauri::AppHandle) -> bool {
+pub fn delete(folder_account_id: i32, folder_name: String, app_handle: tauri::AppHandle) -> bool {
     let conn = &mut establish_connection(&app_handle);
 
     conn.transaction::<_, diesel::result::Error, _>(|conn| {
-        let _ = diesel::delete(
-            filters::table.filter(
-                filters::feed_id.eq_any(
-                    feeds
-                        .filter(folder.eq(&folder_name))
-                        .select(id)
-                        .load::<i32>(conn)?,
-                ),
-            ),
-        )
-        .execute(conn)?;
+        let feed_ids = feeds
+            .filter(folder.eq(&folder_name))
+            .filter(account_id.eq(folder_account_id))
+            .select(id)
+            .load::<i32>(conn)?;
+
+        let _ = diesel::delete(filters::table.filter(filters::feed_id.eq_any(&feed_ids)))
+            .execute(conn)?;
+
+        let _ = diesel::delete(articles::table.filter(articles::feed_id.eq_any(&feed_ids)))
+            .execute(conn)?;
 
         let _ = diesel::delete(
-            articles::table.filter(
-                articles::feed_id.eq_any(
-                    feeds
-                        .filter(folder.eq(&folder_name))
-                        .select(id)
-                        .load::<i32>(conn)?,
-                ),
-            ),
+            feeds
+                .filter(folder.eq(folder_name))
+                .filter(account_id.eq(folder_account_id)),
         )
         .execute(conn)?;
-
-        let _ = diesel::delete(feeds.filter(folder.eq(folder_name))).execute(conn)?;
 
         Ok(())
     })

@@ -22,6 +22,7 @@ function SideBar({ hidden }: SideBarProps) {
   const {
     accounts,
   } = useAppContext();
+
   const classes = `overflow-auto shadow md:border border-primary-100 shadow-xl md:rounded-3xl px-1 py-3 h-full w-full md:w-3/5 lg:w-2/5 xl:w-1/3xl:w-1/5 absolute z-10 top-0 left-0 right-0 md:static ${hidden ? "hidden" : "block"}`;
 
   return (

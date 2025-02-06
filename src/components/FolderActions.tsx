@@ -16,13 +16,15 @@ import { RiMore2Line } from "@remixicon/react";
 import { useState } from "react";
 import { renameFolder, deleteFolder } from "../helpers/foldersData";
 import { useNotification } from "../NotificationContext";
+import { AccountInterface } from "../interfaces";
 
 interface FolderActionsProps {
+  account: AccountInterface;
   folder: string;
   setFolder: (folder: string) => void;
 }
 
-const FolderActions: React.FC<FolderActionsProps> = ({ folder, setFolder }) => {
+const FolderActions: React.FC<FolderActionsProps> = ({ account, folder, setFolder }) => {
   const { addNotification } = useNotification();
   const renameModalDisclosure = useDisclosure()
   const deleteModalDisclosure = useDisclosure()
@@ -35,7 +37,7 @@ const FolderActions: React.FC<FolderActionsProps> = ({ folder, setFolder }) => {
   }
 
   function handleDeleteFolder() {
-    deleteFolder(folder).then((isDeleted) => {
+    deleteFolder(account.id!, folder).then((isDeleted) => {
       if (isDeleted) {
         addNotification("Folder Deleted", 'The folder was deleted successfully!', 'success');
         deleteModalDisclosure.onClose();

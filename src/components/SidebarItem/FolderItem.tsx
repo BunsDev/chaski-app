@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { FeedInterface } from '../../interfaces';
+import { AccountInterface, FeedInterface } from '../../interfaces';
 import { Link } from '@tanstack/react-router';
 import FolderActions from '../FolderActions';
 import { Listbox, ListboxItem, Button } from '@heroui/react';
 import { RiFolder3Line, RiArrowRightSLine, RiArrowDownSLine } from "@remixicon/react";
 
 interface FolderItemProps {
+  account: AccountInterface;
   folderName: string;
   feeds: FeedInterface[];
 }
 
-const FolderItem: React.FC<FolderItemProps> = ({ folderName, feeds }) => {
+const FolderItem: React.FC<FolderItemProps> = ({ account, folderName, feeds }) => {
   const [folder, setFolder] = useState(folderName);
   const [isOpen, setIsOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -60,7 +61,7 @@ const FolderItem: React.FC<FolderItemProps> = ({ folderName, feeds }) => {
         </Link>
 
         {isHovering && (
-          <FolderActions folder={folder} setFolder={setFolder} ></FolderActions>
+          <FolderActions folder={folder} account={account} setFolder={setFolder} ></FolderActions>
         )}
       </div>
 

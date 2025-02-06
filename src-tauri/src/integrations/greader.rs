@@ -9,8 +9,8 @@ struct GReaderSubscription {
     title: String,
     categories: Vec<GReaderCategory>,
     url: String,
-    #[serde(rename = "htmlUrl")]
-    html_url: String,
+    // #[serde(rename = "htmlUrl")]
+    // html_url: String,
     #[serde(rename = "iconUrl")]
     icon_url: String,
 }
@@ -30,14 +30,6 @@ pub struct GReaderClient {
     pub client: Client,
     pub server_url: String,
     pub auth_token: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct LoginResponse {
-    #[serde(rename = "SID")]
-    sid: String,
-    #[serde(rename = "Auth")]
-    auth: String,
 }
 
 impl GReaderClient {

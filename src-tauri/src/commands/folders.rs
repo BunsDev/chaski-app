@@ -34,9 +34,13 @@ pub async fn rename_folder(
 }
 
 #[command]
-pub async fn delete_folder(folder: String, app_handle: tauri::AppHandle) -> Result<String, ()> {
+pub async fn delete_folder(
+    account_id: i32,
+    folder: String,
+    app_handle: tauri::AppHandle,
+) -> Result<String, ()> {
     log::debug!(target: "chaski:commands","Command delete folder. Folder: {folder:?}");
-    let result = crate::entities::folders::delete(folder, app_handle);
+    let result = crate::entities::folders::delete(account_id, folder, app_handle);
     if result {
         Ok(String::from("true"))
     } else {
